@@ -1,3 +1,5 @@
+import os.path
+
 from skyfield.api import load
 from skyfield.sgp4lib import EarthSatellite
 
@@ -22,6 +24,8 @@ def data_processing(address):
 
 
 def preparatory_function(address_array):
+    if not os.path.exists("resources/results"):
+        os.mkdir("resources/results")
     for address in address_array:
         data_processing(address)
 

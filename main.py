@@ -2,7 +2,7 @@ from datetime import datetime
 
 from skyfield.api import load
 
-import functions
+from functions import *
 
 #
 # def data_processing(address):
@@ -40,7 +40,7 @@ ts = load.timescale()
 utc_time = ts.utc(2023, 7, 1)
 epoch_time = utc_time.tt
 
-print(functions.time_coordinates_cubesat(epoch_time, address_array[0]))
+print(time_coordinates_cubesat(epoch_time, address_array[0]))
 
 ra, dec = functions.time_coordinates_cubesat(epoch_time, address_array[0])
 print(functions.blackout_cubesat(ra, dec, 180, 0))

@@ -42,8 +42,8 @@ epoch_time = utc_time.tt
 
 print(time_coordinates_cubesat(epoch_time, address_array[0]))
 
-ra, dec = functions.time_coordinates_cubesat(epoch_time, address_array[0])
-print(functions.blackout_cubesat(ra, dec, 180, 0))
+ra, dec = time_coordinates_cubesat(epoch_time, address_array[0])
+print(blackout_cubesat(ra, dec, 180, 0))
 
 
 

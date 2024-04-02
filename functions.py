@@ -1,12 +1,13 @@
+import math
+
 from skyfield.api import load
 from skyfield.sgp4lib import EarthSatellite
-from skyfield.toposlib import wgs84
+from skyfield.api import Angle, wgs84, Topos
 
 
 def time_coordinates_cubesat(required_time, address):
     min_time_diff = float("inf")
     tle_data = ["", ""]
-    satellite = None
 
     with open(address) as reader:
         tle_list = reader.readlines()
@@ -21,11 +22,33 @@ def time_coordinates_cubesat(required_time, address):
             tle_data[0] = line_first
             tle_data[1] = line_second
 
+    satellite = EarthSatellite(tle_data[0], tle_data[1])
+
     ts = load.timescale()
-    bluffton = wgs84.latlon(+40.8939, -83.8917)
-    tle_date = satellite.epoch.utc
-    return (satellite - bluffton).at(ts.utc(tle_date[0], tle_date[1], tle_date[2], tle_date[3], tle_date[4], tle_date[5])).radec()
+    t = ts.now()
+
+    topocentric = Topos(latitude_degrees=51.48, longitude_degrees=-0.19)
+
+    difference = satellite - topocentric
+    topocentric = difference.at(t)
+    alt, az, distance = topocentric.altaz()
+
+    ra = az.radians
+    dec = alt.radians
+
+    return math.degrees(ra), math.degrees(dec)
 
 
-# def blackout_cubesat(required_time, address, coordinates_RGB):
+def blackout_cubesat(satellite_ra, satellite_dec, light_source_ra, light_source_dec):
+    ts = load.timescale()
 
+    observer_location = Topos(latitude_degrees=light_source_dec, longitude_degrees=light_source_ra)
+
+    satellite_position = Topos(latitude_degrees=satellite_dec, longitude_degrees=satellite_ra)
+
+    t = ts.now()
+    difference = satellite_position - observer_location
+    topocentric = difference.at(t)
+    alt, az, distance = topocentric.altaz()
+
+    return alt.degrees > 0

@@ -37,10 +37,13 @@ address_array = ["resources/202307_GRBAlpha_tle.txt", "resources/202307_Monitor-
 
 
 ts = load.timescale()
-utc_time = ts.utc(2023, 7, 20)
+utc_time = ts.utc(2023, 7, 1)
 epoch_time = utc_time.tt
 
 print(functions.time_coordinates_cubesat(epoch_time, address_array[0]))
+
+ra, dec = functions.time_coordinates_cubesat(epoch_time, address_array[0])
+print(functions.blackout_cubesat(ra, dec, 180, 0))
 
 
 

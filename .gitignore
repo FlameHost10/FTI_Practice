@@ -1,5 +1,5 @@
 /.idea
-/.venv
+/venv
 /de421.bsp
-__pycache__
+/__pycache__
 .gitignore

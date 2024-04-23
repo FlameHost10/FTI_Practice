@@ -1,4 +1,4 @@
-from math import sin, cos, asin, acos, radians
+from math import sin, cos, asin, acos, radians, pi, sqrt
 from skyfield.sgp4lib import EarthSatellite
 
 
@@ -55,3 +55,20 @@ def earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, 
     Theta_src = acos(-dot_sc_light_source / (sc_r * light_source_r))
 
     return Theta_Earth > Theta_src
+
+
+def point_on_sphere_distribution(n):
+    return [
+        (
+            (
+            acos(1 – 2 * (i + 0.5) / n),  # phi
+            pi * (1 + sqrt(5)) * i  # theta
+            ),
+            (
+                cos(pi * (1 + sqrt(5)) * i) * sin(acos(1 - 2 * (i + 0.5) / n)),  # x
+                sin(pi * (1 + sqrt(5)) * i) * sin(acos(1 - 2 * (i + 0.5) / n)),  # y
+                cos(acos(1 - 2 * (i + 0.5) / n))  # z
+            )
+        )
+        for i in range(n)
+    ]

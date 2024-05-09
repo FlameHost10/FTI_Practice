@@ -2,6 +2,13 @@ from math import sin, cos, asin, acos, radians, pi, sqrt
 from skyfield.sgp4lib import EarthSatellite
 
 
+def radec_xyz(ra, dec, r):
+    z = r * sin(dec)
+    y = r * cos(dec) * sin(ra)
+    x = r * cos(dec) * cos(ra)
+    return x, y, z
+
+
 def time_coordinates_cubesat(utc_time, address):
     min_time_diff = float("inf")
     tle_data = ["", ""]

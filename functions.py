@@ -72,3 +72,22 @@ def point_on_sphere_distribution(n):
         )
         for i in range(n)
     ]
+
+
+def signal_delay(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, light_source_r):
+    if earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, light_source_r):
+        raise ValueError('Earth blocks the SC')
+    else:
+        C = 299_792.458
+
+        sc_z = sc_r * sin(sc_dec)
+        sc_y = sc_r * cos(sc_dec) * sin(sc_ra)
+        sc_x = sc_r * cos(sc_dec) * cos(sc_ra)
+
+        light_source_z = light_source_r * sin(light_source_dec)
+        light_source_y = light_source_r * cos(light_source_dec) * sin(light_source_ra)
+        light_source_x = light_source_r * cos(light_source_dec) * cos(light_source_ra)
+
+        distance = ((sc_x - light_source_x) ** 2 + (sc_y - light_source_y) ** 2 + (sc_z - light_source_z) ** 2) ** .5
+
+        return distance / C

@@ -64,23 +64,6 @@ def earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, 
     return Theta_Earth > Theta_src
 
 
-def point_on_sphere_distribution(n):
-    return [
-        (
-            (
-            acos(1 – 2 * (i + 0.5) / n),  # phi
-            pi * (1 + sqrt(5)) * i  # theta
-            ),
-            (
-                cos(pi * (1 + sqrt(5)) * i) * sin(acos(1 - 2 * (i + 0.5) / n)),  # x
-                sin(pi * (1 + sqrt(5)) * i) * sin(acos(1 - 2 * (i + 0.5) / n)),  # y
-                cos(acos(1 - 2 * (i + 0.5) / n))  # z
-            )
-        )
-        for i in range(n)
-    ]
-
-
 def signal_delay(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, light_source_r):
     if earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec, light_source_r):
         raise ValueError('Earth blocks the SC')

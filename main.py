@@ -1,16 +1,23 @@
 from functions import *
 from skyfield.api import load
 
+
+def read_satellites_from_file(filename):
+    satellites = []
+    with open(filename, 'r') as file:
+        for line in file:
+            satellite = Satellite.from_string(line.strip())
+            satellites.append(satellite)
+    return satellites
+
+
 if __name__ == '__main__':
-    address_array = ["resources/202307_GRBAlpha_tle.txt", "resources/202307_Monitor-2_tle.txt",
-                     "resources/202307_Monitor-3_tle.txt", "resources/202307_Monitor-4_tle.txt",
-                     "resources/202307_VZLUSAT-2_tle.txt"]
+    satellites = read_satellites_from_file('resources/satellites.txt')
+    # ra = 288.2643
+    # dec = 19.7712
 
-    ts = load.timescale()
-    utc_time = ts.utc(2023, 7, 1)
-
-    print(time_coordinates_cubesat(utc_time, address_array[0]))
-
-    print(earth_block_degrees(0, 90, 10000, 180, -90, 10000))
-    print(earth_block_degrees(90, 0, 10000, 270, 0, 10000))
-    print(earth_block_degrees(0, 90, 10000, 0, 90, 10001))
+    # ra = 180
+    # dec = 0
+    results = calculate_delays_between_satellites(satellites, ra, dec)
+    for elem in results:
+        print(elem)

@@ -136,6 +136,8 @@ def calculate_time_delays(sc1: Satellite, sc2: Satellite, light_ra, light_dec):
 
 
 def calculate_delays_between_satellites(satellites, light_ra, light_dec):
+    light_ra_rad = np.radians(light_ra)
+    light_dec_rad = np.radians(light_dec)
     results = []
     n = len(satellites)
     for i in range(n):
@@ -143,7 +145,7 @@ def calculate_delays_between_satellites(satellites, light_ra, light_dec):
             sc1 = satellites[i]
             sc2 = satellites[j]
             try:
-                delay = calculate_time_delays(sc1, sc2, light_ra, light_dec)
+                delay = calculate_time_delays(sc1, sc2, light_ra_rad, light_dec_rad)
                 results.append(
                     (f"The delay between satellites {sc1.name} and {sc2.name} is {delay:.6f} seconds", delay))
             except ValueError:

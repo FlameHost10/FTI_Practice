@@ -13,8 +13,8 @@ def read_satellites_from_file(filename):
 
 if __name__ == '__main__':
     satellites = read_satellites_from_file('resources/satellites.txt')
-    # ra = 288.2643
-    # dec = 19.7712
+    ra = 288.2643
+    dec = 19.7712
 
     # ra = 180
     # dec = 0

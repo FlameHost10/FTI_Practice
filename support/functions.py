@@ -86,27 +86,25 @@ def time_coordinates_cubesat(utc_time, address):
     satellite = EarthSatellite(tle_data[0], tle_data[1])
     geocentric = satellite.at(utc_time)
     ra, dec, r = geocentric.radec()
-    print(ra, dec, r)
+    # print(ra, dec, r)
 
-    print('Time of interest: ', utc_time.utc_jpl())
-    print('Satellite position: ', ra._degrees, dec._degrees, r.km)
-    print('Satellite epoch: ', satellite.epoch.utc_jpl())
+    # print('Time of interest: ', utc_time.utc_jpl())
+    # print('Satellite position: ', ra._degrees, dec._degrees, r.km)
+    # print('Satellite epoch: ', satellite.epoch.utc_jpl())
 
-    return ra._degrees, dec._degrees, r.km
+    return radians(ra._degrees), radians(dec._degrees), r.km
 
 
-def earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec):
-    sc_ra = radians(sc_ra)
-    sc_dec = radians(sc_dec)
+def earth_block_degrees(sc_ra_r, sc_dec_r, sc_r, light_source_ra_r, light_source_dec_r):
 
-    light_source_ra = radians(light_source_ra)
-    light_source_dec = radians(light_source_dec)
+    light_source_ra = radians(light_source_ra_r)
+    light_source_dec = radians(light_source_dec_r)
 
     r_Earth = 6371  # km
 
-    sc_z = sin(sc_dec)
-    sc_y = cos(sc_dec) * sin(sc_ra)
-    sc_x = cos(sc_dec) * cos(sc_ra)
+    sc_z = sin(sc_dec_r)
+    sc_y = cos(sc_dec_r) * sin(sc_ra_r)
+    sc_x = cos(sc_dec_r) * cos(sc_ra_r)
 
     light_source_z = sin(light_source_dec)
     light_source_y = cos(light_source_dec) * sin(light_source_ra)
@@ -120,12 +118,12 @@ def earth_block_degrees(sc_ra, sc_dec, sc_r, light_source_ra, light_source_dec):
     return Theta_Earth > Theta_src
 
 
-def calculate_time_delays(sc1: Satellite, sc2: Satellite, light_ra, light_dec):
+def calculate_time_delays(sc1: Satellite, sc2: Satellite, light_ra_r, light_dec_r):
     c = 299_792.458
-    r_GRB = np.array(radec_xyz(light_ra, light_dec, 1))
+    r_GRB = np.array(radec_xyz(light_ra_r, light_dec_r, 1))
 
-    if (earth_block_degrees(sc1.ra, sc1.dec, sc1.r, light_ra, light_dec)
-            or earth_block_degrees(sc2.ra, sc2.dec, sc2.r, light_ra, light_dec)):
+    if (earth_block_degrees(sc1.ra, sc1.dec, sc1.r, light_ra_r, light_dec_r)
+            or earth_block_degrees(sc2.ra, sc2.dec, sc2.r, light_ra_r, light_dec_r)):
         raise ValueError('Earth blocks the SC')
 
     r_diff = np.array([sc1.x, sc1.y, sc1.z]) - np.array([sc2.x, sc2.y, sc2.z])
@@ -135,23 +133,24 @@ def calculate_time_delays(sc1: Satellite, sc2: Satellite, light_ra, light_dec):
     return dT
 
 
-def calculate_delays_between_satellites(satellites, light_ra, light_dec):
-    light_ra_rad = np.radians(light_ra)
-    light_dec_rad = np.radians(light_dec)
+def calculate_delays_between_satellites(satellites, light_ra_r, light_dec_r):
     results = []
     n = len(satellites)
     for i in range(n):
-        for j in range(i+1, n):
+        for j in range(i + 1, n):
             sc1 = satellites[i]
             sc2 = satellites[j]
             try:
-                delay = calculate_time_delays(sc1, sc2, light_ra_rad, light_dec_rad)
-                results.append(
-                    (f"The delay between satellites {sc1.name} and {sc2.name} is {delay:.6f} seconds", delay))
+                delay = calculate_time_delays(sc1, sc2, light_ra_r, light_dec_r)
+                results.append((
+                    f"The delay between satellites \033[93m{sc1.name}\033[0m and \033[93m{sc2.name}\033[0m is "
+                    f"\033[91m{delay:.6f}\033[0m seconds", delay))
             except ValueError:
-                results.append((f"One of the satellites {sc1.name} or {sc2.name} is obscured, it is impossible to "
-                                f"calculate the delay", None))
+                results.append((
+                    f"One of the satellites \033[93m{sc1.name}\033[0m or \033[93m{sc2.name}\033[0m is obscured, "
+                    f"it is \033[91mimpossible to calculate the delay\033[0m", None))
     return results
+
 
 
 

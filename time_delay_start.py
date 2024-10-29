@@ -1,5 +1,4 @@
-from functions import *
-from skyfield.api import load
+from support.functions import *
 
 
 def read_satellites_from_file(filename):
@@ -13,9 +12,11 @@ def read_satellites_from_file(filename):
 
 if __name__ == '__main__':
     satellites = read_satellites_from_file('resources/satellites.txt')
-    ra = 288.2643
-    dec = 19.7712
+    ra_d = 288.2643
+    dec_d = 19.7712
 
+    ra = radians(ra_d)
+    dec = radians(dec_d)
     # ra = 180
     # dec = 0
     results = calculate_delays_between_satellites(satellites, ra, dec)

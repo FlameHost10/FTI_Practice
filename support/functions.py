@@ -6,9 +6,9 @@ from skyfield.sgp4lib import EarthSatellite
 
 
 class Satellite:
-    def __init__(self, name=None, ra=None, dec=None, r=None, x=None, y=None, z=None, time_str=None):
-
+    def __init__(self, name=None, ra=None, dec=None, r=None, x=None, y=None, z=None, time_str=None, is_earth_occulted=None):
         self.name = name
+        self.is_earth_occulted = is_earth_occulted
 
         if ra is not None and dec is not None and r is not None:
             self._set_equatorial(ra, dec, r)
@@ -142,13 +142,13 @@ def calculate_delays_between_satellites(satellites, light_ra_r, light_dec_r):
             sc2 = satellites[j]
             try:
                 delay = calculate_time_delays(sc1, sc2, light_ra_r, light_dec_r)
-                results.append((
+                results.append([
                     f"The delay between satellites \033[93m{sc1.name}\033[0m and \033[93m{sc2.name}\033[0m is "
-                    f"\033[91m{delay:.6f}\033[0m seconds", delay))
+                    f"\033[91m{delay:.6f}\033[0m seconds", sc1, sc2, delay])
             except ValueError:
-                results.append((
+                results.append([
                     f"One of the satellites \033[93m{sc1.name}\033[0m or \033[93m{sc2.name}\033[0m is obscured, "
-                    f"it is \033[91mimpossible to calculate the delay\033[0m", None))
+                    f"it is \033[91mimpossible to calculate the delay\033[0m", sc1, sc2, None])
     return results
 
 

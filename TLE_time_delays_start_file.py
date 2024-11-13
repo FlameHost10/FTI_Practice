@@ -23,7 +23,7 @@ def read_input_file(file_path):
 def write_output_file(output_path, utc_time, ra_deg, dec_deg, satellites, results):
     with open(output_path, 'w') as file:
         file.write(f"Time: {utc_time.utc_iso()} UTC\n")
-        file.write(f"Source position: RA(deg), Dec(deg), R(km) = {ra_deg:.4f}, {dec_deg:+.4f}, ----\n")
+        file.write(f"Source position: RA(deg), Dec(deg) = {ra_deg:.4f}, {dec_deg:+.4f}\n")
         file.write("\nSpacecraft information\n\n")
         file.write("ScName  RA  Dec  R  IsEarthOcculted\n")
 
@@ -42,7 +42,7 @@ def write_output_file(output_path, utc_time, ra_deg, dec_deg, satellites, result
                 delay_str = '--'
             else:
                 delay_str = f"{delay:.6f}"
-            file.write(f"{sc1.name}---{sc2.name}\t{delay_str}\n")
+            file.write(f"{sc1.name}\t-\t{sc2.name}\t{delay_str}\n")
 
 
 def get_satellites_positions(utc_time, tle_folder_path, light_ra_r, light_dec_r):
@@ -50,7 +50,8 @@ def get_satellites_positions(utc_time, tle_folder_path, light_ra_r, light_dec_r)
     tle_folder = Path(tle_folder_path)
 
     for tle_file in tle_folder.glob("*.txt"):
-        name = tle_file.stem
+        file_name = tle_file.stem
+        name = file_name.split("_")[1]
         ra, dec, r = time_coordinates_cubesat(utc_time, tle_file)
         satellite = Satellite(name=name, ra=ra, dec=dec, r=r)
 

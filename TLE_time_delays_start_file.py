@@ -27,9 +27,11 @@ def write_output_file(output_path, utc_time, ra_deg, dec_deg, satellites, result
         file.write("\nSpacecraft information\n\n")
         file.write("ScName  RA  Dec  R  IsEarthOcculted\n")
 
+        rad_to_degree = 180 / np.pi
+
         for sat in satellites:
             occulted = 'Y' if sat.is_earth_occulted else 'N'
-            file.write(f"{sat.name:8}  {sat.ra:.4f}  {sat.dec:.4f}  {sat.r:.4f}  {occulted}\n")
+            file.write(f"{sat.name:8}  {sat.ra * rad_to_degree:.2f}  {sat.dec * rad_to_degree:.2f}  {sat.r:.4f}  {occulted}\n")
 
         file.write("\nTime delays\n\n")
         file.write("ScNames   dT(s)\n")

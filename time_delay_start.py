@@ -17,8 +17,6 @@ if __name__ == '__main__':
 
     ra = radians(ra_d)
     dec = radians(dec_d)
-    # ra = 180
-    # dec = 0
     results = calculate_delays_between_satellites(satellites, ra, dec)
     for elem in results:
-        print(elem)
+        print(elem[3])

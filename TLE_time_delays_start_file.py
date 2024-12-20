@@ -37,9 +37,9 @@ def write_output_file(output_path, utc_time, ra_deg, dec_deg, satellites, result
         file.write("ScNames   dT(s)\n")
 
         for result in results:
-            delay = result[3]
-            sc1 = result[1]
-            sc2 = result[2]
+            delay = result[2]
+            sc1 = result[0]
+            sc2 = result[1]
             if delay is None:
                 delay_str = '--'
             else:

@@ -142,13 +142,14 @@ def calculate_delays_between_satellites(satellites, light_ra_r, light_dec_r):
             sc2 = satellites[j]
             try:
                 delay = calculate_time_delays(sc1, sc2, light_ra_r, light_dec_r)
-                results.append([
-                    f"The delay between satellites \033[93m{sc1.name}\033[0m and \033[93m{sc2.name}\033[0m is "
-                    f"\033[91m{delay:.6f}\033[0m seconds", sc1, sc2, delay])
+                results.append([sc1, sc2, delay,
+                    f"\033[93m{sc1.name}\033[0m - \033[93m{sc2.name}\033[0m is "
+                    f"\033[91m{delay:.6f}\033[0m seconds"])
             except ValueError:
-                results.append([
-                    f"One of the satellites \033[93m{sc1.name}\033[0m or \033[93m{sc2.name}\033[0m is obscured, "
-                    f"it is \033[91mimpossible to calculate the delay\033[0m", sc1, sc2, None])
+                results.append([sc1, sc2, None,
+                    f"\033[93m{sc1.name}\033[0m or \033[93m{sc2.name}\033[0m is obscured, "
+                    f"\033[91mimpossible to calculate the delay\033[0m"])
+
     return results
 
 

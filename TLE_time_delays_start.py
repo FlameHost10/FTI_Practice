@@ -51,14 +51,13 @@ def main():
         print(f"{sat.name}: RA={sat.ra}, Dec={sat.dec}, Distance={sat.r} km")
 
     print("=" * 88)
-    print("\n" * 5)
     light_ra_r = radians(float(input("\033[94mEnter source coordinates (RA) in degrees: \033[0m")))
     light_dec_r = radians(float(input("\033[94mEnter source coordinates (Dec) in degrees: \033[0m")))
 
     results = calculate_delays_between_satellites(satellites, light_ra_r, light_dec_r)
     print("Satellite delay results:")
     for result in results:
-        print(result[0])
+        print(result[-1])
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 import random
 from skyfield.api import load
 from pathlib import Path
+
 from support.functions import *
 from math import radians
 from support.validators import *
@@ -55,6 +56,8 @@ def main():
     light_dec_r = radians(float(input("\033[94mEnter source coordinates (Dec) in degrees: \033[0m")))
 
     results = calculate_delays_between_satellites(satellites, light_ra_r, light_dec_r)
+
+
     print("Satellite delay results:")
     for result in results:
         print(result[-1])

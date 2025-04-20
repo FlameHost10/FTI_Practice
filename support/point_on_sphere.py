@@ -80,4 +80,4 @@ def main():
     plot_3d(points)
 
 
-main()
+# main()

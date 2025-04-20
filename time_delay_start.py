@@ -1,3 +1,4 @@
+from distribution_delays import building_distribution
 from support.functions import *
 
 
@@ -20,3 +21,7 @@ if __name__ == '__main__':
     results = calculate_delays_between_satellites(satellites, ra, dec)
     for elem in results:
         print(elem[3])
+
+    np_arr = np.array(results)
+    delays = np_arr[:, 2]
+    building_distribution(delays)
